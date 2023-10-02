@@ -1,6 +1,7 @@
 const express = require('express');
 const BodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 const knex = require('knex');
 const register = require('./controllers/Register');
 const signin = require('./controllers/Signin');
@@ -24,6 +25,23 @@ const db = knex({
 const app = express();
 
 app.use(BodyParser.json());
+
+const allowedOrigins = [
+  'https://face-recognition-app-94ha.onrender.com',
+  // Add other allowed origins as needed
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 app.get('/', (req, res) => { res.send('It is working')});
 app.post('/signin', (req,res) => { signin.handleSignIn(req, res, db, bcrypt )});
