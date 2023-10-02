@@ -1,9 +1,7 @@
 const express = require('express');
 const BodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
-const cors = require('cors');
 const knex = require('knex');
-
 const register = require('./controllers/Register');
 const signin = require('./controllers/Signin');
 const profile = require('./controllers/Profile');
@@ -26,7 +24,6 @@ const db = knex({
 const app = express();
 
 app.use(BodyParser.json());
-app.use(cors());
 
 app.get('/', (req, res) => { res.send('It is working')});
 app.post('/signin', (req,res) => { signin.handleSignIn(req, res, db, bcrypt )});
